@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Añadir videojuego · Backlog</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark"></span>
+      Backlog
+    </a>
+    <nav>
+      <ul class="tabs">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="buscar.html" class="active">Buscar</a></li>
+        <li><a href="perfil.html">Tu perfil</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title" id="titulo-pagina">Añadir un videojuego</h1>
+  <p class="page-subtitle">Rellena los datos del juego. Si está disponible en varias plataformas, elige aquella en la que lo has jugado (o vas a jugar).</p>
+
+  <form class="form-card" id="form-videojuego" novalidate>
+    <div class="field">
+      <label for="titulo">Título</label>
+      <input type="text" id="titulo" name="titulo" placeholder="Ej: The Witcher 3: Wild Hunt">
+      <p class="field-error" data-error-for="titulo"></p>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="plataforma">Plataforma jugada</label>
+        <select id="plataforma" name="plataforma">
+          <option value="">Selecciona una plataforma</option>
+          <option value="PC">PC</option>
+          <option value="PS5">PlayStation 5</option>
+          <option value="PS4">PlayStation 4</option>
+          <option value="Xbox Series X/S">Xbox Series X/S</option>
+          <option value="Xbox One">Xbox One</option>
+          <option value="Nintendo Switch">Nintendo Switch</option>
+          <option value="Mobile">Móvil</option>
+        </select>
+        <p class="field-error" data-error-for="plataforma"></p>
+      </div>
+      <div class="field">
+        <label for="genero">Género</label>
+        <input type="text" id="genero" name="genero" placeholder="Ej: RPG, Plataformas...">
+        <p class="field-error" data-error-for="genero"></p>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="anio">Año de lanzamiento</label>
+        <input type="number" id="anio" name="anio" placeholder="2015" min="1970" max="2100">
+        <p class="field-error" data-error-for="anio"></p>
+      </div>
+      <div class="field">
+        <label for="estado">Estado</label>
+        <select id="estado" name="estado">
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="JUGANDO">Jugando</option>
+          <option value="COMPLETADO">Completado</option>
+          <option value="ABANDONADO">Abandonado</option>
+        </select>
+        <p class="field-error" data-error-for="estado"></p>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Tu valoración</label>
+        <div class="rating-bar" id="rating-bar" aria-label="Valoración de 0 a 5 estrellas, en medias estrellas">
+          <span class="rating-bar__star" data-index="1"><span class="rating-bar__star-bg">★</span><span class="rating-bar__star-fill">★</span></span>
+          <span class="rating-bar__star" data-index="2"><span class="rating-bar__star-bg">★</span><span class="rating-bar__star-fill">★</span></span>
+          <span class="rating-bar__star" data-index="3"><span class="rating-bar__star-bg">★</span><span class="rating-bar__star-fill">★</span></span>
+          <span class="rating-bar__star" data-index="4"><span class="rating-bar__star-bg">★</span><span class="rating-bar__star-fill">★</span></span>
+          <span class="rating-bar__star" data-index="5"><span class="rating-bar__star-bg">★</span><span class="rating-bar__star-fill">★</span></span>
+        </div>
+        <input type="hidden" id="valoracion" name="valoracion" value="0">
+        <p class="field-error" data-error-for="valoracion"></p>
+      </div>
+      <div class="field">
+        <label for="horasJugadas">Horas jugadas</label>
+        <input type="number" id="horasJugadas" name="horasJugadas" placeholder="0" min="0">
+        <p class="field-error" data-error-for="horasJugadas"></p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="urlCaratula">URL de la carátula (opcional)</label>
+      <input type="text" id="urlCaratula" name="urlCaratula" placeholder="https://...">
+      <p class="field-error" data-error-for="urlCaratula"></p>
+    </div>
+
+    <div class="field">
+      <label for="reseña">Tu opinión sobre el juego <span class="field-optional">(opcional)</span></label>
+      <textarea id="reseña" name="reseña" rows="4" placeholder="¿Qué te ha parecido? Escribe lo que quieras..."></textarea>
+      <p class="field-error" data-error-for="reseña"></p>
+    </div>
+
+    <div class="field field--favorito">
+      <button type="button" class="heart-toggle" id="heart-toggle" aria-pressed="false">
+        <span class="heart-toggle__icon">♡</span>
+        <span class="heart-toggle__texto">Marcar como mi juego favorito</span>
+      </button>
+      <input type="hidden" id="favorito" name="favorito" value="false">
+      <p class="field-hint">Solo puedes tener un favorito a la vez — marcar este quitará el favorito anterior.</p>
+    </div>
+
+    <button type="submit" class="btn" id="btn-guardar">Añadir a mi colección</button>
+
+    <div class="form-message" id="mensaje-formulario"></div>
+  </form>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/buscar.js"></script>
+</body>
+</html>

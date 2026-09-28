@@ -1,0 +1,59 @@
+### Listar todos los videojuegos
+GET http://localhost:8080/api/videojuegos
+
+### Crear un videojuego
+POST http://localhost:8080/api/videojuegos
+Content-Type: application/json
+
+{
+  "titulo": "The Witcher 3: Wild Hunt",
+  "plataforma": "PC",
+  "genero": "RPG",
+  "anio": 2015,
+  "valoracion": 9.5,
+  "horasJugadas": 120,
+  "estado": "COMPLETADO",
+  "urlCaratula": "https://ejemplo.com/witcher3.jpg"
+}
+
+### Obtener un videojuego por id (sustituye el id por uno real)
+GET http://localhost:8080/api/videojuegos/6a9ab70776d43b7bcda980fd
+
+### Actualizar un videojuego (sustituye el id)
+PUT http://localhost:8080/api/videojuegos/6a9ab70776d43b7bcda980fd
+Content-Type: application/json
+
+{
+  "titulo": "The Witcher 3: Wild Hunt",
+  "plataforma": "PC",
+  "genero": "RPG",
+  "anio": 2015,
+  "valoracion": 10.0,
+  "horasJugadas": 150,
+  "estado": "COMPLETADO",
+  "urlCaratula": "https://ejemplo.com/witcher3.jpg"
+}
+
+### Borrar un videojuego (sustituye el id)
+DELETE http://localhost:8080/api/videojuegos/6a9b19e1ea07a747a31a3b5e
+
+### Filtrar por plataforma
+GET http://localhost:8080/api/videojuegos?plataforma=PC
+
+
+### Filtrar por plataforma
+GET http://localhost:8080/api/videojuegos?plataforma=PS5
+
+### Probar validación (título vacío, debería fallar)
+POST http://localhost:8080/api/videojuegos
+Content-Type: application/json
+
+{
+  "titulo": "",
+  "plataforma": "PC",
+  "genero": "RPG",
+  "anio": 2015,
+  "valoracion": 9.5,
+  "horasJugadas": 120,
+  "estado": "COMPLETADO"
+}
