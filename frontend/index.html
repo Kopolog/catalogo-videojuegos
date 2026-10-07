@@ -8,58 +8,59 @@
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="site-header__inner">
-      <a class="brand" href="index.html">
-        <span class="brand__mark"></span>
-        Backlog
-      </a>
-      <nav>
-        <ul class="tabs">
-          <li><a href="index.html" class="active">Home</a></li>
-          <li><a href="buscar.html">Buscar</a></li>
-          <li><a href="perfil.html">Tu perfil</a></li>
-        </ul>
-      </nav>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark"></span>
+      Backlog
+    </a>
+    <nav>
+      <ul class="tabs">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="buscar.html">Buscar</a></li>
+        <li><a href="perfil.html">Tu perfil</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title">Tu catálogo, siempre a mano</h1>
+  <p class="page-subtitle">Lleva el registro de lo que juegas, lo que quieres jugar y lo que ya has terminado.</p>
+
+  <section>
+    <div class="section-heading">
+      <h2>Añadidos recientemente</h2>
+      <span class="count" id="contador-recientes"></span>
     </div>
-  </header>
-
-  <main>
-    <h1 class="page-title">Tu catálogo, siempre a mano</h1>
-    <p class="page-subtitle">Lleva el registro de lo que juegas, lo que quieres jugar y lo que ya has terminado.</p>
-
-    <section>
-      <div class="section-heading">
-        <h2>Añadidos recientemente</h2>
-        <span class="count" id="contador-recientes"></span>
-      </div>
-      <div class="card-grid" id="lista-recientes">
-        <p>Cargando…</p>
-      </div>
-    </section>
-
-    <section>
-      <div class="section-heading">
-        <h2>Estos juegos te esperan</h2>
-        <span class="count" id="contador-esperan"></span>
-      </div>
-      <div class="card-grid" id="lista-esperan">
-        <p>Cargando…</p>
-      </div>
+    <div class="card-grid" id="lista-recientes">
+      <p>Cargando…</p>
+    </div>
   </section>
-    <section>
-      <div class="section-heading">
-        <h2>Últimos lanzamientos</h2>
-      </div>
-      <div class="coming-soon">
-        <strong>Próximamente</strong>
-        Esta sección mostrará los lanzamientos más recientes de la industria, conectando con una base de datos externa de videojuegos.
-      </div>
-    </section>
-  </main>
 
-  <script src="js/api.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/home.js"></script>
+  <section>
+    <div class="section-heading">
+      <h2>Estos juegos te esperan</h2>
+      <span class="count" id="contador-esperan"></span>
+    </div>
+    <div class="card-grid" id="lista-esperan">
+      <p>Cargando…</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-heading">
+      <h2>Últimos lanzamientos</h2>
+    </div>
+    <div class="card-grid" id="lista-lanzamientos">
+      <p>Cargando…</p>
+    </div>
+  </section>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/rawg.js"></script>
+<script src="js/home.js"></script>
 </body>
 </html>

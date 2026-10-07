@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 
 :root {
@@ -161,7 +160,8 @@ section + section {
 }
 
 .game-card__cover {
-  aspect-ratio: 3 / 4;
+  position: relative;
+  aspect-ratio: 16 / 9;
   background: var(--line);
   display: flex;
   align-items: center;
@@ -174,6 +174,7 @@ section + section {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
   display: block;
 }
 
@@ -181,6 +182,23 @@ section + section {
   font-family: 'Fraunces', serif;
   font-size: 2rem;
   color: var(--ink-soft);
+}
+
+.favorite-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  background: var(--mustard);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: var(--ink);
+  z-index: 1;
 }
 
 .game-card__body {
@@ -201,6 +219,12 @@ section + section {
 .game-card__meta {
   font-size: 0.85rem;
   color: var(--ink-soft);
+}
+
+.game-card__stars {
+  color: var(--mustard);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
 }
 
 .game-card__footer {
@@ -275,30 +299,6 @@ section + section {
 
 .state-block--error strong { color: var(--brick); }
 
-/* ---------- Placeholder "próximamente" ---------- */
-
-.coming-soon {
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  padding: 32px 24px;
-  color: var(--ink-soft);
-  background: repeating-linear-gradient(
-          135deg,
-          var(--paper-raised),
-          var(--paper-raised) 10px,
-          var(--paper) 10px,
-          var(--paper) 20px
-  );
-}
-
-.coming-soon strong {
-  display: block;
-  color: var(--ink);
-  font-family: 'Fraunces', serif;
-  font-size: 1.1rem;
-  margin-bottom: 6px;
-}
-
 /* ---------- Formulario ---------- */
 
 .form-card {
@@ -311,6 +311,7 @@ section + section {
 
 .field {
   margin-bottom: 18px;
+  position: relative;
 }
 
 .field label {
@@ -321,7 +322,8 @@ section + section {
 }
 
 .field input,
-.field select {
+.field select,
+.field textarea {
   width: 100%;
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 0.95rem;
@@ -332,11 +334,22 @@ section + section {
   color: var(--ink);
 }
 
+.field textarea {
+  resize: vertical;
+}
+
 .field input:focus,
-.field select:focus {
+.field select:focus,
+.field textarea:focus {
   outline: 2px solid var(--teal);
   outline-offset: 1px;
   border-color: var(--teal);
+}
+
+.field input[readonly] {
+  background: var(--paper-raised);
+  color: var(--ink-soft);
+  cursor: not-allowed;
 }
 
 .field-row {
@@ -349,6 +362,18 @@ section + section {
   color: var(--brick);
   font-size: 0.82rem;
   margin-top: 5px;
+}
+
+.field-hint {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  margin: 6px 0 0;
+}
+
+.field-optional {
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
 }
 
 .field input.has-error,
@@ -397,35 +422,60 @@ section + section {
   color: var(--paper-raised);
 }
 
-.field-optional {
-  font-weight: 400;
-  color: var(--ink-soft);
-  font-size: 0.82rem;
-}
+/* ---------- Juego seleccionado (vista previa, solo lectura) ---------- */
 
-.field textarea {
-  width: 100%;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.95rem;
-  padding: 9px 10px;
-  border: 1.5px solid var(--line);
+.selected-game {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  border: 2px solid var(--ink);
   border-radius: var(--radius);
   background: var(--paper);
-  color: var(--ink);
-  resize: vertical;
+  padding: 10px;
+  margin-bottom: 18px;
 }
 
-.field textarea:focus {
-  outline: 2px solid var(--teal);
-  outline-offset: 1px;
-  border-color: var(--teal);
+.selected-game[hidden] {
+  display: none;
 }
 
-.field-hint {
+.selected-game__cover {
+  width: 128px;
+  height: 72px;
+  flex-shrink: 0;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.selected-game__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.selected-game__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.selected-game__title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+
+.selected-game__meta {
+  font-size: 0.85rem;
   color: var(--ink-soft);
-  font-size: 0.8rem;
-  margin: 6px 0 0;
 }
+
+/* ---------- Favorito (corazón) ---------- */
 
 .field--favorito {
   border-top: 1.5px solid var(--line);
@@ -465,7 +515,7 @@ section + section {
   color: var(--brick);
 }
 
-/* ---------- Rating bar (estrellas, con medias) ---------- */
+/* ---------- Rating bar (estrellas grandes, con medias) ---------- */
 
 .rating-bar {
   display: flex;
@@ -498,58 +548,133 @@ section + section {
   pointer-events: none;
 }
 
-.rating-bar__value {
-  margin-left: 8px;
+/* ---------- Autocompletado (RAWG) ---------- */
+
+.field--autocomplete {
+  position: relative;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--paper-raised);
+  border: 2px solid var(--ink);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 5;
+  display: none;
+}
+
+.autocomplete-list.show {
+  display: block;
+}
+
+.autocomplete-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--line);
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover {
+  background: var(--paper);
+}
+
+.autocomplete-item img,
+.autocomplete-item__placeholder {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 2px;
+  background: var(--line);
+  flex-shrink: 0;
+}
+
+.autocomplete-item__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.autocomplete-item__title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.autocomplete-item__meta {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- Tarjeta de lanzamiento (sección "Últimos lanzamientos") ---------- */
+
+.release-card {
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.release-card__cover {
+  aspect-ratio: 16 / 9;
+  background: var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 2px solid var(--ink);
+}
+
+.release-card__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.release-card__cover .placeholder {
+  font-family: 'Fraunces', serif;
+  font-size: 2rem;
+  color: var(--ink-soft);
+}
+
+.release-card__body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.release-card__title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.release-card__meta {
   font-size: 0.85rem;
   color: var(--ink-soft);
 }
 
-.rating-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.rating-bar__star {
-  position: relative;
-  display: inline-block;
-  font-size: 2.6rem;
-  line-height: 1;
-  cursor: pointer;
-  width: 1em;
-  height: 1em;
-}
-
-/* ---------- Insignia de favorito ---------- */
-
-.favorite-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
-  background: var(--mustard);
-  border: 2px solid var(--ink);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  color: var(--ink);
-  z-index: 1;
-}
-
-.game-card__cover {
-  position: relative;
-}
-
-.game-card__stars {
-  color: var(--mustard);
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-}
-
-
+/* ---------- Utilidades ---------- */
 
 .visually-hidden {
   position: absolute;

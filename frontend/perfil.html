@@ -8,49 +8,39 @@
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="site-header__inner">
-      <a class="brand" href="index.html">
-        <span class="brand__mark"></span>
-        Backlog
-      </a>
-      <nav>
-        <ul class="tabs">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="buscar.html">Buscar</a></li>
-          <li><a href="perfil.html" class="active">Tu perfil</a></li>
-        </ul>
-      </nav>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark"></span>
+      Backlog
+    </a>
+    <nav>
+      <ul class="tabs">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="buscar.html">Buscar</a></li>
+        <li><a href="perfil.html" class="active">Tu perfil</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title">Tu perfil</h1>
+  <p class="page-subtitle">Todos los videojuegos que has añadido a tu catálogo, con su estado y plataforma.</p>
+
+  <section>
+    <div class="section-heading">
+      <h2>Tu colección</h2>
+      <span class="count" id="contador-juegos"></span>
     </div>
-  </header>
+    <div class="card-grid" id="lista-perfil">
+      <p>Cargando tu colección…</p>
+    </div>
+  </section>
+</main>
 
-  <main>
-    <h1 class="page-title">Tu perfil</h1>
-    <p class="page-subtitle">Todos los videojuegos que has añadido a tu catálogo, con su estado y plataforma.</p>
-
-    <section>
-      <div class="section-heading">
-        <h2>Tu colección</h2>
-        <span class="count" id="contador-juegos"></span>
-      </div>
-      <div class="card-grid" id="lista-perfil">
-        <p>Cargando tu colección…</p>
-      </div>
-    </section>
-
-    <section id="seccion-reseñas">
-      <div class="section-heading">
-        <h2>Reseñas</h2>
-      </div>
-      <div class="coming-soon">
-        <strong>Próximamente</strong>
-        Aquí podrás escribir tu propia reseña y valoración de cada juego que hayas completado.
-      </div>
-    </section>
-  </main>
-
-  <script src="js/api.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/perfil.js"></script>
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/perfil.js"></script>
 </body>
 </html>

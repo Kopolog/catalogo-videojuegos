@@ -83,8 +83,8 @@ function crearTarjetaVideojuego(juego, { conAcciones = false } = {}) {
     btnBorrar.addEventListener('click', () => {
       if (confirm(`¿Borrar "${juego.titulo}" de tu catálogo?`)) {
         VideojuegosAPI.borrar(juego.id)
-          .then(() => card.remove())
-          .catch(() => alert('No se ha podido borrar el videojuego. Inténtalo de nuevo.'));
+            .then(() => card.remove())
+            .catch(() => alert('No se ha podido borrar el videojuego. Inténtalo de nuevo.'));
       }
     });
 
@@ -94,6 +94,57 @@ function crearTarjetaVideojuego(juego, { conAcciones = false } = {}) {
   }
 
   body.appendChild(footer);
+
+  card.appendChild(cover);
+  card.appendChild(body);
+
+  return card;
+}
+
+// Tarjeta para "Últimos lanzamientos": datos externos de RAWG, sin acciones
+// ni estado/valoración propios, ya que no pertenecen a la colección del usuario.
+function crearTarjetaLanzamiento(juego) {
+  const card = document.createElement('article');
+  card.className = 'release-card';
+
+  const cover = document.createElement('div');
+  cover.className = 'release-card__cover';
+
+  if (juego.caratula) {
+    const img = document.createElement('img');
+    img.src = juego.caratula;
+    img.alt = `Carátula de ${juego.titulo}`;
+    img.onerror = () => {
+      const placeholder = document.createElement('span');
+      placeholder.className = 'placeholder';
+      placeholder.textContent = juego.titulo?.charAt(0) || '?';
+      cover.appendChild(placeholder);
+      img.remove();
+    };
+    cover.appendChild(img);
+  } else {
+    const placeholder = document.createElement('span');
+    placeholder.className = 'placeholder';
+    placeholder.textContent = juego.titulo?.charAt(0) || '?';
+    cover.appendChild(placeholder);
+  }
+
+  const body = document.createElement('div');
+  body.className = 'release-card__body';
+
+  const titulo = document.createElement('div');
+  titulo.className = 'release-card__title';
+  titulo.textContent = juego.titulo;
+
+  const meta = document.createElement('div');
+  meta.className = 'release-card__meta';
+  const plataformasTexto = (juego.plataformas || []).slice(0, 3).join(', ');
+  meta.textContent = [juego.fechaLanzamiento, juego.genero, plataformasTexto]
+      .filter(Boolean)
+      .join(' · ');
+
+  body.appendChild(titulo);
+  body.appendChild(meta);
 
   card.appendChild(cover);
   card.appendChild(body);

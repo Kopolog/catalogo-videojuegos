@@ -19,8 +19,6 @@ function pintarEstrellas(valor) {
     const relleno = Math.min(Math.max(valor - (indice - 1) * 2, 0), 2) / 2; // 0, 0.5 o 1
     estrella.querySelector('.rating-bar__star-fill').style.width = `${relleno * 100}%`;
   });
-  const nEstrellas = valor / 2;
-  ratingTexto.textContent = valor > 0 ? `${nEstrellas} de 5` : 'Sin valorar';
 }
 
 estrellas.forEach((estrella) => {
@@ -51,13 +49,166 @@ heartToggle.addEventListener('click', () => {
   pintarCorazon(nuevoValor);
 });
 
+// ---------- Plataformas: se reconstruyen según el juego elegido ----------
+const PLATAFORMAS_POR_DEFECTO = Array.from(form.elements.plataforma.options).map((opt) => ({
+  value: opt.value,
+  texto: opt.textContent,
+}));
+
+function restringirPlataformas(valoresDisponibles) {
+  const select = form.elements.plataforma;
+  const placeholder = PLATAFORMAS_POR_DEFECTO[0];
+
+  const opciones = valoresDisponibles.length > 0
+      ? [placeholder, ...valoresDisponibles.map((nombre) => ({ value: nombre, texto: nombre }))]
+      : PLATAFORMAS_POR_DEFECTO;
+
+  select.innerHTML = '';
+  opciones.forEach((opt) => {
+    const option = document.createElement('option');
+    option.value = opt.value;
+    option.textContent = opt.texto;
+    select.appendChild(option);
+  });
+
+  if (valoresDisponibles.length === 1) {
+    select.value = valoresDisponibles[0];
+  }
+}
+
+// Añade, si hace falta, una opción para una plataforma guardada que ya no
+// esté en la lista actual del <select> (por ejemplo, al editar un juego).
+function asegurarOpcionPlataforma(nombre) {
+  if (!nombre) return;
+  const select = form.elements.plataforma;
+  const yaExiste = Array.from(select.options).some((opt) => opt.value === nombre);
+  if (!yaExiste) {
+    const option = document.createElement('option');
+    option.value = nombre;
+    option.textContent = nombre;
+    select.appendChild(option);
+  }
+  select.value = nombre;
+}
+
+// ---------- Vista previa del juego elegido (título/año/género/carátula bloqueados) ----------
+const selectedGame = document.getElementById('selected-game');
+const selectedGameCover = document.getElementById('selected-game-cover');
+const selectedGameTitle = document.getElementById('selected-game-title');
+const selectedGameMeta = document.getElementById('selected-game-meta');
+const tituloInput = document.getElementById('titulo');
+const tituloHint = document.getElementById('titulo-hint');
+const autocompleteList = document.getElementById('autocomplete-list');
+let debounceTimer = null;
+
+function mostrarJuegoSeleccionado({ titulo, anio, genero, caratula }) {
+  selectedGameTitle.textContent = titulo;
+  selectedGameMeta.textContent = [anio, genero].filter(Boolean).join(' · ');
+  selectedGameCover.innerHTML = '';
+  if (caratula) {
+    const img = document.createElement('img');
+    img.src = caratula;
+    img.alt = `Carátula de ${titulo}`;
+    selectedGameCover.appendChild(img);
+  }
+  selectedGame.hidden = false;
+}
+
+function limpiarJuegoSeleccionado() {
+  form.elements.anio.value = '';
+  form.elements.genero.value = '';
+  form.elements.urlCaratula.value = '';
+  selectedGame.hidden = true;
+  restringirPlataformas([]);
+}
+
+function seleccionarJuegoRAWG(juego) {
+  tituloInput.value = juego.titulo;
+  form.elements.anio.value = juego.anio || '';
+  form.elements.genero.value = juego.genero || '';
+  form.elements.urlCaratula.value = juego.caratula || '';
+  restringirPlataformas(juego.plataformas || []);
+  mostrarJuegoSeleccionado(juego);
+  limpiarErrores();
+
+  autocompleteList.classList.remove('show');
+  autocompleteList.innerHTML = '';
+}
+
+function mostrarResultadosAutocompletado(resultados) {
+  autocompleteList.innerHTML = '';
+
+  if (resultados.length === 0) {
+    autocompleteList.classList.remove('show');
+    return;
+  }
+
+  resultados.forEach((juego) => {
+    const item = document.createElement('div');
+    item.className = 'autocomplete-item';
+
+    const imagen = juego.caratula
+        ? `<img src="${juego.caratula}" alt="">`
+        : `<div class="autocomplete-item__placeholder"></div>`;
+
+    item.innerHTML = `
+      ${imagen}
+      <div class="autocomplete-item__info">
+        <span class="autocomplete-item__title">${juego.titulo}</span>
+        <span class="autocomplete-item__meta">${juego.anio || '—'}${juego.genero ? ' · ' + juego.genero : ''}</span>
+      </div>
+    `;
+
+    item.addEventListener('click', () => seleccionarJuegoRAWG(juego));
+    autocompleteList.appendChild(item);
+  });
+
+  autocompleteList.classList.add('show');
+}
+
+tituloInput.addEventListener('input', () => {
+  if (form.elements.anio.value) limpiarJuegoSeleccionado();
+
+  clearTimeout(debounceTimer);
+  const texto = tituloInput.value.trim();
+
+  if (texto.length < 3) {
+    autocompleteList.classList.remove('show');
+    autocompleteList.innerHTML = '';
+    return;
+  }
+
+  debounceTimer = setTimeout(() => {
+    buscarJuegosRAWG(texto)
+        .then(mostrarResultadosAutocompletado)
+        .catch(() => {
+          autocompleteList.classList.remove('show');
+        });
+  }, 400);
+});
+
+document.addEventListener('click', (evento) => {
+  if (evento.target !== tituloInput && !evento.target.closest('#autocomplete-list')) {
+    autocompleteList.classList.remove('show');
+  }
+});
+
 // ---------- Si venimos con ?id=... es una edición: cargamos los datos existentes ----------
 if (idEdicion) {
   tituloPagina.textContent = 'Editar videojuego';
   btnGuardar.textContent = 'Guardar cambios';
+  tituloInput.readOnly = true;
+  tituloHint.hidden = true;
 
   VideojuegosAPI.obtener(idEdicion)
       .then((juego) => {
+        mostrarJuegoSeleccionado({
+          titulo: juego.titulo,
+          anio: juego.anio,
+          genero: juego.genero,
+          caratula: juego.urlCaratula,
+        });
+
         campos.forEach((campo) => {
           if (campo === 'valoracion') {
             ratingInput.value = juego.valoracion || 0;
@@ -67,6 +218,10 @@ if (idEdicion) {
           if (campo === 'favorito') {
             heartInput.value = String(!!juego.favorito);
             pintarCorazon(!!juego.favorito);
+            return;
+          }
+          if (campo === 'plataforma') {
+            asegurarOpcionPlataforma(juego.plataforma);
             return;
           }
           const input = form.elements[campo];
@@ -86,9 +241,11 @@ function limpiarErrores() {
 }
 
 function mostrarErroresValidacion(erroresPorCampo) {
+  const ocultos = ['anio', 'genero', 'urlCaratula'];
   Object.entries(erroresPorCampo).forEach(([campo, texto]) => {
-    const errorEl = form.querySelector(`[data-error-for="${campo}"]`);
-    const input = form.elements[campo];
+    const campoVisible = ocultos.includes(campo) ? 'titulo' : campo;
+    const errorEl = form.querySelector(`[data-error-for="${campoVisible}"]`);
+    const input = form.elements[campoVisible];
     if (errorEl) errorEl.textContent = texto;
     if (input) input.classList.add('has-error');
   });
@@ -119,6 +276,12 @@ form.addEventListener('submit', (evento) => {
   evento.preventDefault();
   limpiarErrores();
   mensaje.className = 'form-message';
+
+  if (!idEdicion && !form.elements.anio.value) {
+    mostrarErroresValidacion({ titulo: 'Elige un juego de la lista de resultados.' });
+    tituloInput.focus();
+    return;
+  }
 
   const datos = recogerDatosFormulario();
   const peticion = idEdicion

@@ -26,14 +26,28 @@
 
 <main>
   <h1 class="page-title" id="titulo-pagina">Añadir un videojuego</h1>
-  <p class="page-subtitle">Rellena los datos del juego. Si está disponible en varias plataformas, elige aquella en la que lo has jugado (o vas a jugar).</p>
+  <p class="page-subtitle">Busca el juego por su título y elígelo de la lista: el año, el género, la carátula y las plataformas disponibles se rellenan automáticamente.</p>
 
   <form class="form-card" id="form-videojuego" novalidate>
-    <div class="field">
+    <div class="field field--autocomplete">
       <label for="titulo">Título</label>
-      <input type="text" id="titulo" name="titulo" placeholder="Ej: The Witcher 3: Wild Hunt">
+      <input type="text" id="titulo" name="titulo" placeholder="Ej: The Witcher 3: Wild Hunt" autocomplete="off">
+      <div class="autocomplete-list" id="autocomplete-list"></div>
+      <p class="field-hint" id="titulo-hint">Escribe al menos 3 letras y elige el juego de la lista.</p>
       <p class="field-error" data-error-for="titulo"></p>
     </div>
+
+    <div class="selected-game" id="selected-game" hidden>
+      <div class="selected-game__cover" id="selected-game-cover"></div>
+      <div class="selected-game__info">
+        <span class="selected-game__title" id="selected-game-title"></span>
+        <span class="selected-game__meta" id="selected-game-meta"></span>
+      </div>
+    </div>
+
+    <input type="hidden" id="genero" name="genero">
+    <input type="hidden" id="anio" name="anio">
+    <input type="hidden" id="urlCaratula" name="urlCaratula">
 
     <div class="field-row">
       <div class="field">
@@ -49,19 +63,6 @@
           <option value="Mobile">Móvil</option>
         </select>
         <p class="field-error" data-error-for="plataforma"></p>
-      </div>
-      <div class="field">
-        <label for="genero">Género</label>
-        <input type="text" id="genero" name="genero" placeholder="Ej: RPG, Plataformas...">
-        <p class="field-error" data-error-for="genero"></p>
-      </div>
-    </div>
-
-    <div class="field-row">
-      <div class="field">
-        <label for="anio">Año de lanzamiento</label>
-        <input type="number" id="anio" name="anio" placeholder="2015" min="1970" max="2100">
-        <p class="field-error" data-error-for="anio"></p>
       </div>
       <div class="field">
         <label for="estado">Estado</label>
@@ -96,12 +97,6 @@
     </div>
 
     <div class="field">
-      <label for="urlCaratula">URL de la carátula (opcional)</label>
-      <input type="text" id="urlCaratula" name="urlCaratula" placeholder="https://...">
-      <p class="field-error" data-error-for="urlCaratula"></p>
-    </div>
-
-    <div class="field">
       <label for="reseña">Tu opinión sobre el juego <span class="field-optional">(opcional)</span></label>
       <textarea id="reseña" name="reseña" rows="4" placeholder="¿Qué te ha parecido? Escribe lo que quieras..."></textarea>
       <p class="field-error" data-error-for="reseña"></p>
@@ -123,6 +118,7 @@
 </main>
 
 <script src="js/api.js"></script>
+<script src="js/rawg.js"></script>
 <script src="js/buscar.js"></script>
 </body>
 </html>
