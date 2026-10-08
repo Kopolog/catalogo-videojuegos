@@ -68,7 +68,7 @@ public class VideojuegoService {
 
         List<Videojuego> favoritosActuales =videojuegoRepository.findByFavoritoTrue();
         favoritosActuales.stream()
-                .filter(juego -> juego.getId().equals(idExcluido))
+                .filter(juego -> !juego.getId().equals(idExcluido))
                 .forEach(juego -> {
                         juego.setFavorito(false);
                     videojuegoRepository.save(juego);
