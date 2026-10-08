@@ -687,3 +687,19 @@ section + section {
   .field-row { grid-template-columns: 1fr; }
   .site-header__inner { flex-direction: column; align-items: flex-start; }
 }
+
+/* ---------- Pie de página (atribución a RAWG) ---------- */
+
+.site-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  border-top: 2px solid var(--ink);
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.site-footer a {
+  color: var(--ink);
+  font-weight: 500;
+}
