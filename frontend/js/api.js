@@ -1,6 +1,9 @@
 // api.js — funciones compartidas para hablar con el backend Spring Boot
 
-const API_BASE = 'http://localhost:8080/api/videojuegos';
+const ES_LOCAL = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const API_BASE = ES_LOCAL
+    ? 'http://localhost:8080/api/videojuegos'
+    : 'https://catalogo-videojuegos-fh8x.onrender.com/api/videojuegos';
 
 async function manejarRespuesta(response) {
   if (response.status === 204) return null;
